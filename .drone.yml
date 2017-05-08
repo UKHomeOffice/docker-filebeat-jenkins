@@ -1,0 +1,44 @@
+---
+pipeline:
+  build_image:
+    privileged: true
+    image: docker:1.11
+    environment:
+      - DOCKER_HOST=tcp://127.0.0.1:2375
+    commands:
+      - docker build -t docker-filebeat-jenkins .
+    when:
+      branch:
+      event: [tag,push]
+
+  image_to_quay:
+    image: docker:1.11
+    environment:
+      - DOCKER_HOST=tcp://127.0.0.1:2375
+    commands:
+      - docker login -u="ukhomeofficedigital+drone_filebeat_bot" -p=${DOCKER_PASSWORD} quay.io
+      - docker tag docker-filebeat-jenkins quay.io/ukhomeofficedigital/docker-filebeat-jenkins:${DRONE_COMMIT_SHA}
+      - docker tag docker-filebeat-jenkins docker.digital.homeoffice.gov.uk/docker-filebeat-jenkins:latest
+      - docker push quay.io/ukhomeofficedigital/docker-filebeat-jenkins:${DRONE_COMMIT_SHA}
+      - docker push quay.io/ukhomeofficedigital/docker-filebeat-jenkins:latest
+    when:
+      event: [tag,push]
+
+  tag_to_quay:
+    image: docker:1.11
+    environment:
+      - DOCKER_HOST=tcp://127.0.0.1:2375
+    commands:
+      - docker login -u="ukhomeofficedigital+drone_filebeat_bot" -p=${DOCKER_PASSWORD} quay.io
+      - docker tag docker-filebeat-jenkins quay.io/ukhomeofficedigital/docker-filebeat-jenkins:${DRONE_TAG}
+      - docker push quay.io/ukhomeofficedigital/docker-filebeat-jenkins:${DRONE_TAG}
+    when:
+      event: [tag]
+
+services:
+  dind:
+    image: docker:1.11-dind
+    privileged: true
+    command:
+      - "-s"
+      - "overlay"

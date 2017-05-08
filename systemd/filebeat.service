@@ -1,0 +1,27 @@
+[Unit]
+Description=Filebeat Service
+After=docker.service
+Requires=docker.service
+After=jenkins.service
+Requires=jenkins.service
+
+[Service]
+TimeoutStartSec=0
+Restart=always
+ExecStartPre=-/usr/bin/docker stop filebeat
+ExecStartPre=-/usr/bin/docker rm filebeat
+ExecStartPre=/usr/bin/docker pull quay.io/ukhomeofficedigital/docker-filebeat-jenkins:latest
+TimeoutStartSec=20
+ExecStart=/usr/bin/docker run \
+  --rm \
+  --name filebeat \
+  -e JENKINS_INSTANCE=local \
+  -e ELASTICSEARCH_HOST=localhost \
+  -e ELASTICSEARCH_PORT=9200 \
+  -e ELASTICSEARCH_INDEX='filebeat-%{+yyyy.MM.dd}' \
+  -v /data/filebeat:/data \
+  -v /data/jenkins:/data/jenkins \
+  quay.io/ukhomeofficedigital/docker-filebeat-jenkins:latest
+
+[Install]
+WantedBy=multi-user.target
