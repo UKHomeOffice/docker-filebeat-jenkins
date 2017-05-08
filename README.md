@@ -69,3 +69,4 @@ In Kibana, create an index called `logstash-*` to view Jenkins' build logs.
 
 Filebeat documentation: https://www.elastic.co/guide/en/beats/filebeat/current/index.html<br>
 Filebeat FAQ: https://www.elastic.co/guide/en/beats/filebeat/current/faq.html
+
