@@ -18,7 +18,7 @@ pipeline:
     commands:
       - docker login -u="ukhomeofficedigital+drone_filebeat_bot" -p=${DOCKER_PASSWORD} quay.io
       - docker tag docker-filebeat-jenkins quay.io/ukhomeofficedigital/docker-filebeat-jenkins:${DRONE_COMMIT_SHA}
-      - docker tag docker-filebeat-jenkins docker.digital.homeoffice.gov.uk/docker-filebeat-jenkins:latest
+      - docker tag docker-filebeat-jenkins quay.io/ukhomeofficedigital/docker-filebeat-jenkins:latest
       - docker push quay.io/ukhomeofficedigital/docker-filebeat-jenkins:${DRONE_COMMIT_SHA}
       - docker push quay.io/ukhomeofficedigital/docker-filebeat-jenkins:latest
     when:

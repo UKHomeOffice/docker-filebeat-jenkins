@@ -36,14 +36,14 @@ As a member of DevOps team I want to send Jenkins' build logs to [Elastic Stack]
   After=jenkins.service
   Requires=jenkins.service
   ExecStartPre=-/usr/bin/docker stop filebeat
-  ExecStart=/usr/bin/docker run --rm --name filebeat --volume filebeat_data:/data --volumes-from jenkins:ro docker.digital.homeoffice.gov.uk/docker-filebeat-jenkins
+  ExecStart=/usr/bin/docker run --rm --name filebeat --volume filebeat_data:/data --volumes-from jenkins:ro docker-filebeat-jenkins
   ```
     - **_NOTE:_** `--volume filebeat_data:/data` is required in order to persist Filebeat state. Failing to persist Filebeat state will lead to Filebeat re-sending all build logs to Elasticsearch on restart
 
 **Build Filebeat image**
 *
     ```
-    docker build --rm --no-cache --tag docker.digital.homeoffice.gov.uk/docker-filebeat-jenkins .
+    docker build --rm --no-cache --tag docker-filebeat-jenkins .
     ```
 
 
