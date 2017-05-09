@@ -90,7 +90,7 @@ output.elasticsearch:
   #username:
   #password:
 
-  index: "${ELASTICSEARCH_INDEX}"
+  index: "${ELASTICSEARCH_INDEX}-%{+YYYY.MM.dd}"
 
 #----------------------------- Logstash output --------------------------------
 #output.logstash:
