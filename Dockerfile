@@ -1,4 +1,4 @@
-FROM quay.io/ukhomeofficedigital/centos-base:v0.5.0
+FROM quay.io/ukhomeofficedigital/centos-base:latest
 
 RUN yum install -y curl && yum clean all && rpm --rebuilddb
 
